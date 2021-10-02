@@ -19,6 +19,11 @@ import static java.util.Objects.isNull;
 @Slf4j
 public class HttpServerConfigurator {
 
+    /**
+     * Run server method, this method will have the responsibility of orchestrate
+     * the start of the HTTP server, reading the 'config.properties' and reading
+     * the request to handle it
+     * */
     public static void run() {
         ConfigurationLoader configurationLoader = new ConfigurationLoader();
 
@@ -29,8 +34,8 @@ public class HttpServerConfigurator {
                 }
             }
         } catch (IOException e) {
-            log.debug("An error occur trying to initialize the server in the port: {}", configurationLoader.properties().port());
             log.error(e.getMessage());
+            System.exit(0);
         }
     }
 
@@ -57,6 +62,11 @@ public class HttpServerConfigurator {
         parseRequest(requestBuilder.toString());
     }
 
+    /**
+     * Parse the request, extracting the method, path, headers...
+     *
+     * @param request request as string
+     */
     private static void parseRequest(String request) {
         String[] requestLines = request.split("\r\n");
         String[] requestType = requestLines[0].split(" ");
@@ -73,7 +83,7 @@ public class HttpServerConfigurator {
 
         log.debug("Method: {}, Path: {}, Headers:", method, path);
         for (String header : headers) {
-            log.debug("\t {}",  header);
+            log.debug("\t {}", header);
         }
     }
 
