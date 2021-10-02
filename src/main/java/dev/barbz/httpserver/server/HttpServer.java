@@ -22,7 +22,7 @@ public class HttpServer {
      * Run server method, this method will have the responsibility of orchestrate
      * the start of the HTTP server, reading the 'config.properties' and reading
      * the request to handle it
-     * */
+     */
     public static void run() {
         ConfigurationLoader configurationLoader = new ConfigurationLoader();
 
@@ -138,8 +138,9 @@ public class HttpServer {
          * @param properties properties of "resources/config.properties"
          */
         private void instantiatesHttpServerProperties(Properties properties) {
-            this.properties = new HttpServerProperties()
-                    .port(Integer.parseInt(properties.getProperty("server.port", "8080")));
+            int port = Integer.parseInt(properties.getProperty("server.port", "8080"));
+
+            this.properties = new HttpServerProperties(port);
         }
 
         /**
