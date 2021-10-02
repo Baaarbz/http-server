@@ -1,4 +1,4 @@
-package dev.barbz.httpserver.config;
+package dev.barbz.httpserver.server;
 
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -8,7 +8,6 @@ import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
@@ -17,7 +16,7 @@ import java.util.stream.Collectors;
 import static java.util.Objects.isNull;
 
 @Slf4j
-public class HttpServerConfigurator {
+public class HttpServer {
 
     /**
      * Run server method, this method will have the responsibility of orchestrate
@@ -59,7 +58,7 @@ public class HttpServerConfigurator {
             requestBuilder.append(line)
                     .append("\r\n");
         }
-        parseRequest(requestBuilder.toString());
+        HttpRequest request = parseRequest(requestBuilder.toString());
     }
 
     /**
@@ -67,10 +66,11 @@ public class HttpServerConfigurator {
      *
      * @param request request as string
      */
-    private static void parseRequest(String request) {
+    private static HttpRequest parseRequest(String request) {
         String[] requestLines = request.split("\r\n");
+        // The request type (method, path and version) is contained in the first
+        // line of the request.
         String[] requestType = requestLines[0].split(" ");
-
         String method = requestType[0];
         String path = requestType[1];
 
@@ -85,6 +85,8 @@ public class HttpServerConfigurator {
         for (String header : headers) {
             log.debug("\t {}", header);
         }
+
+        return new HttpRequest(method, path, headers);
     }
 
     /**

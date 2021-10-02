@@ -1,4 +1,4 @@
-package dev.barbz.httpserver.config;
+package dev.barbz.httpserver.server;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
