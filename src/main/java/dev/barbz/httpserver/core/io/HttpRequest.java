@@ -1,4 +1,4 @@
-package dev.barbz.httpserver.server;
+package dev.barbz.httpserver.core.io;
 
 import java.util.List;
 
