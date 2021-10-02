@@ -4,13 +4,15 @@ import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Properties;
+import java.util.stream.Collectors;
 
 import static java.util.Objects.isNull;
 
@@ -32,8 +34,47 @@ public class HttpServerConfigurator {
         }
     }
 
-    private static void handleClient(Socket client) {
+    /**
+     * Handle client request, all the request received will read and
+     * parsed.
+     *
+     * @param client socket client
+     * @throws IOException thrown if an error occur trying to read the
+     *                     received request.
+     */
+    private static void handleClient(Socket client) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(client.getInputStream()));
+        StringBuilder requestBuilder = new StringBuilder();
 
+        // Request ends with one empty line (\r\n).
+        // Client will send empty line, but inputStream will be still open,
+        // we have to read it until one, empty line arrives.
+        String line;
+        while (!(line = br.readLine()).isBlank()) {
+            requestBuilder.append(line)
+                    .append("\r\n");
+        }
+        parseRequest(requestBuilder.toString());
+    }
+
+    private static void parseRequest(String request) {
+        String[] requestLines = request.split("\r\n");
+        String[] requestType = requestLines[0].split(" ");
+
+        String method = requestType[0];
+        String path = requestType[1];
+
+        // The header comes in the request after the 2 line, then we can read the headers
+        // Now we only want to read the 'Accept' 'Content' or  'Authorization' header
+        List<String> headers = Arrays.asList(requestLines).subList(2, requestLines.length).stream()
+                .filter((String h) ->
+                        (h.startsWith("Accept") || h.startsWith("Content") || h.startsWith("Authorization")))
+                .collect(Collectors.toList());
+
+        log.debug("Method: {}, Path: {}, Headers:", method, path);
+        for (String header : headers) {
+            log.debug("\t {}",  header);
+        }
     }
 
     /**
