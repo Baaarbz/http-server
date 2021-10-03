@@ -102,6 +102,15 @@ public enum HttpStatus {
      */
     NOT_FOUND(404),
     /**
+     * The method specified in the Request-Line is not allowed for the
+     * resource identified by the Request-URI. The response MUST include an
+     * Allow header containing a list of valid methods for the requested
+     * resource.
+     *
+     * @see <a href="https://datatracker.ietf.org/doc/html/rfc2616#section-10.4.6">RFC2616 - 405</a>
+     */
+    METHOD_NOT_ALLOWED(405),
+    /**
      * The server encountered an unexpected condition which prevented it
      * from fulfilling the request.
      *
