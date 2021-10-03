@@ -6,6 +6,6 @@ public class HttpGet implements HttpHandler {
 
     @Override
     public void handle(HttpRequest request) {
-
+        System.out.println("Here we are!");
     }
 }

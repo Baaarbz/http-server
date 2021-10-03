@@ -2,6 +2,7 @@ package dev.barbz.httpserver.core;
 
 import dev.barbz.httpserver.configuration.HttpServerProperties;
 import dev.barbz.httpserver.core.io.HttpRequest;
+import dev.barbz.httpserver.core.util.HttpMethod;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.BufferedReader;
@@ -12,6 +13,8 @@ import java.net.Socket;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static dev.barbz.httpserver.core.util.HttpUtil.processRequest;
 
 @Slf4j
 public class ListenerThread extends Thread {
@@ -50,11 +53,13 @@ public class ListenerThread extends Thread {
         // Client will send empty line, but inputStream will be still open,
         // we have to read it until one, empty line arrives.
         String line;
+
         while (!(line = br.readLine()).isBlank()) {
             requestBuilder.append(line)
                     .append("\r\n");
         }
         HttpRequest request = parseRequest(requestBuilder.toString());
+        processRequest(request);
     }
 
     /**
@@ -67,7 +72,7 @@ public class ListenerThread extends Thread {
         // The request type (method, path and version) is contained in the first
         // line of the request.
         String[] requestType = requestLines[0].split(" ");
-        String method = requestType[0];
+        HttpMethod method = HttpMethod.valueOf(requestType[0]);
         String path = requestType[1];
 
         // The header comes in the request after the 2 line, then we can read the headers
