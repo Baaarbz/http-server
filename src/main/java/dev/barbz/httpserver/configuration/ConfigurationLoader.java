@@ -80,12 +80,12 @@ public class ConfigurationLoader {
             if (isNull(inputStream)) {
                 throw new FileNotFoundException("Custom banner not found in resources/");
             }
-            // Print custom banner.
-            System.out.println(IOUtils.toString(inputStream, StandardCharsets.UTF_8));
-            // Log useful properties.
-            log.info("Server port: {}", properties.port());
-            log.info("Thread pool size: {}", properties.threads());
-            log.info("Resources path: {}", properties.resourcesPath());
+            // Print custom banner and configuration.
+            System.out.printf(IOUtils.toString(inputStream, StandardCharsets.UTF_8),
+                    properties.port(),
+                    properties.threads(),
+                    properties.resourcesPath(),
+                    properties.securityEnabled() ? "Yes" : "No");
         } catch (IOException e) {
             log.error("Can not read banner. {}", e.getMessage());
         }
