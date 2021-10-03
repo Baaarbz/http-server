@@ -27,7 +27,7 @@ public class ListenerThread extends Thread {
         try (ServerSocket serverSocket = new ServerSocket(serverProperties.port())) {
             while (serverSocket.isBound() && !serverSocket.isClosed()) {
                 Socket socket = serverSocket.accept();
-                handleClient(socket);
+                handleRequest(socket);
             }
         } catch (IOException e) {
             log.error("Error setting up socket", e);
@@ -42,7 +42,7 @@ public class ListenerThread extends Thread {
      * @throws IOException thrown if an error occur trying to read the
      *                     received request.
      */
-    private synchronized static void handleClient(Socket client) throws IOException {
+    private synchronized static void handleRequest(Socket client) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(client.getInputStream()));
         StringBuilder requestBuilder = new StringBuilder();
 

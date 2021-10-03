@@ -1,4 +1,4 @@
-package dev.barbz.httpserver.core.handler;
+package dev.barbz.httpserver.core.method;
 
 import dev.barbz.httpserver.core.io.HttpRequest;
 
