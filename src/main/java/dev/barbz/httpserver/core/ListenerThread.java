@@ -54,12 +54,14 @@ public class ListenerThread extends Thread {
         // we have to read it until one, empty line arrives.
         String line;
 
-        while (!(line = br.readLine()).isBlank()) {
+        while ((line = br.readLine()) != null && !line.isEmpty()) {
             requestBuilder.append(line)
                     .append("\r\n");
         }
-        HttpRequest request = parseRequest(requestBuilder.toString());
-        processRequest(request);
+        if (!requestBuilder.isEmpty()) {
+            HttpRequest request = parseRequest(requestBuilder.toString());
+            processRequest(request);
+        }
     }
 
     /**
