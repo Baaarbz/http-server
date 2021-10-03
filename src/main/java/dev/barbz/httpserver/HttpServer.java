@@ -10,7 +10,6 @@ import java.util.concurrent.ThreadPoolExecutor;
 @Slf4j
 public class HttpServer {
 
-
     /**
      * Run server method, this method will have the responsibility of orchestrate
      * the start of the HTTP server, reading the 'config.properties' and reading
