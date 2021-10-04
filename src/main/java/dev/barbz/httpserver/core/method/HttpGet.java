@@ -1,5 +1,7 @@
 package dev.barbz.httpserver.core.method;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.barbz.httpserver.configuration.HttpServerProperties;
@@ -33,7 +35,9 @@ public class HttpGet implements HttpHandler {
     @Override
     public void handle(HttpRequest request) {
         Path filePath = filePath(request.path());
-        ObjectMapper mapper = new ObjectMapper();
+        ObjectMapper mapper = new ObjectMapper()
+                .setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
+
         HttpResponse response;
 
         try {
@@ -61,7 +65,8 @@ public class HttpGet implements HttpHandler {
     public void sendResponse(HttpResponse response) {
         try {
             OutputStream os = client.getOutputStream();
-            os.write(("HTTP/1.1 \r\n" + response.status().response()).getBytes());
+            os.write(("HTTP/1.1 " + response.status().response()).getBytes());
+            os.write("\r\n".getBytes());
             for (String header : response.headers()) {
                 os.write(header.concat("\r\n").getBytes());
             }

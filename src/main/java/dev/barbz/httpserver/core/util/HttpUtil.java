@@ -12,8 +12,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static dev.barbz.httpserver.core.util.HttpStatus.METHOD_NOT_ALLOWED;
-
 @Slf4j
 public class HttpUtil {
 
@@ -21,8 +19,8 @@ public class HttpUtil {
         HttpHandler handler = switch (request.method()) {
             case GET -> new HttpGet(properties, client);
             default -> throw new HttpServerException("This HTTP Serve do not handle your "
-                        .concat(request.method().name())
-                        .concat(" request.\nAllowed request: GET, POST, PUT, DELETE"));
+                    .concat(request.method().name())
+                    .concat(" request.\nAllowed request: GET, POST, PUT, DELETE"));
         };
 
         handler.handle(request);
