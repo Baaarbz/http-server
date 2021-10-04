@@ -1,6 +1,8 @@
 package dev.barbz.httpserver.core.io;
 
+import dev.barbz.httpserver.core.util.HttpStatus;
+
 import java.util.List;
 
-public record HttpResponse(Integer status, String body, List<String> headers) {
+public record HttpResponse(HttpStatus status, String body, List<String> headers) {
 }

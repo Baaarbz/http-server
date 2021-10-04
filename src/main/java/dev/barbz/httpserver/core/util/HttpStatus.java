@@ -21,7 +21,12 @@ public enum HttpStatus {
      *
      * @see <a href="https://datatracker.ietf.org/doc/html/rfc2616#section-10.2.1">RFC2616 - 200</a>
      */
-    OK(200),
+    OK(200) {
+        @Override
+        public String response() {
+            return "200 OK";
+        }
+    },
     /**
      * The request has been fulfilled and resulted in a new resource being
      * created. The newly created resource can be referenced by the URI(s)
@@ -37,7 +42,12 @@ public enum HttpStatus {
      *
      * @see <a href="https://datatracker.ietf.org/doc/html/rfc2616#section-10.2.2">RFC2616 - 201</a>
      */
-    CREATED(201),
+    CREATED(201) {
+        @Override
+        public String response() {
+            return "201 Created";
+        }
+    },
     /**
      * The server has fulfilled the request but does not need to return an
      * entity-body, and might want to return updated metainformation. The
@@ -57,7 +67,12 @@ public enum HttpStatus {
      *
      * @see <a href="https://datatracker.ietf.org/doc/html/rfc2616#section-10.2.5">RFC2616 - 204</a>
      */
-    NO_CONTENT(204),
+    NO_CONTENT(204) {
+        @Override
+        public String response() {
+            return "204 No Content";
+        }
+    },
     /**
      * The request requires user authentication. The response MUST include a
      * WWW-Authenticate header field containing a challenge
@@ -73,9 +88,14 @@ public enum HttpStatus {
      * is explained in "HTTP Authentication: Basic and Digest Access
      * Authentication"
      *
-     * @see <a href="https://datatracker.ietf.org/doc/html/rfc2616#section-10.4.2>RFC2616 - 401</a>
+     * @see <a href="https://datatracker.ietf.org/doc/html/rfc2616#section-10.4.2">RFC2616 - 401</a>
      */
-    UNAUTHORIZED(401),
+    UNAUTHORIZED(401) {
+        @Override
+        public String response() {
+            return "401 Unauthorized";
+        }
+    },
     /**
      * The server understood the request, but is refusing to fulfill it.
      * Authorization will not help and the request SHOULD NOT be repeated.
@@ -87,7 +107,12 @@ public enum HttpStatus {
      *
      * @see <a href="https://datatracker.ietf.org/doc/html/rfc2616#section-10.4.4">RFC2616 - 403</a>
      */
-    FORBIDDEN(403),
+    FORBIDDEN(403) {
+        @Override
+        public String response() {
+            return "403 Forbidden";
+        }
+    },
     /**
      * The server has not found anything matching the Request-URI. No
      * indication is given of whether the condition is temporary or
@@ -100,7 +125,12 @@ public enum HttpStatus {
      *
      * @see <a href="https://datatracker.ietf.org/doc/html/rfc2616#section-10.4.5">RFC2616 - 404</a>
      */
-    NOT_FOUND(404),
+    NOT_FOUND(404) {
+        @Override
+        public String response() {
+            return "404 Not Found";
+        }
+    },
     /**
      * The method specified in the Request-Line is not allowed for the
      * resource identified by the Request-URI. The response MUST include an
@@ -109,19 +139,36 @@ public enum HttpStatus {
      *
      * @see <a href="https://datatracker.ietf.org/doc/html/rfc2616#section-10.4.6">RFC2616 - 405</a>
      */
-    METHOD_NOT_ALLOWED(405),
+    METHOD_NOT_ALLOWED(405) {
+        @Override
+        public String response() {
+            return "405 Method Not Allowed";
+        }
+    },
     /**
      * The server encountered an unexpected condition which prevented it
      * from fulfilling the request.
      *
      * @see <a href="https://datatracker.ietf.org/doc/html/rfc2616#section-10.5.1">RFC2616 - 500</a>
      */
-    INTERNAL_SERVER_ERROR(500);
+    INTERNAL_SERVER_ERROR(500) {
+        @Override
+        public String response() {
+            return "500 Internal Server Error";
+        }
+    };
 
     /**
      * Status
      */
     public final Integer status;
+
+    /**
+     * Status response
+     */
+    public String response() {
+        return "";
+    }
 
     /**
      * Enum constructor with status code.
