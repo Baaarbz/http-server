@@ -5,16 +5,12 @@ import dev.barbz.httpserver.core.io.HttpResponse;
 import dev.barbz.httpserver.core.util.FileUtil;
 import dev.barbz.httpserver.core.util.HttpStatus;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Collections;
-
-import static java.util.Objects.isNull;
 
 public interface HttpHandler {
 

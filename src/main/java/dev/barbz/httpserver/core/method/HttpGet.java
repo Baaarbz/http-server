@@ -1,7 +1,5 @@
 package dev.barbz.httpserver.core.method;
 
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.barbz.httpserver.configuration.HttpServerProperties;
 import dev.barbz.httpserver.core.io.HttpModelError;
