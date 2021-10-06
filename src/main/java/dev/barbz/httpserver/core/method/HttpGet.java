@@ -2,89 +2,51 @@ package dev.barbz.httpserver.core.method;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.barbz.httpserver.configuration.HttpServerProperties;
-import dev.barbz.httpserver.core.exception.HttpServerException;
 import dev.barbz.httpserver.core.io.HttpModelError;
 import dev.barbz.httpserver.core.io.HttpRequest;
 import dev.barbz.httpserver.core.io.HttpResponse;
+import dev.barbz.httpserver.core.util.FileUtil;
+import dev.barbz.httpserver.core.util.HttpContentType;
 
 import java.io.IOException;
-import java.io.OutputStream;
 import java.net.Socket;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Collections;
 
-import static dev.barbz.httpserver.core.util.HttpStatus.INTERNAL_SERVER_ERROR;
 import static dev.barbz.httpserver.core.util.HttpStatus.NOT_FOUND;
 import static dev.barbz.httpserver.core.util.HttpStatus.OK;
 
-public class HttpGet implements HttpHandler {
-
-    private final HttpServerProperties properties;
-    private final Socket client;
-
-    public HttpGet(HttpServerProperties properties, Socket client) {
-        this.properties = properties;
-        this.client = client;
-    }
+public record HttpGet(HttpServerProperties properties,
+                      Socket client) implements HttpHandler {
 
     @Override
     public void handle(HttpRequest request) {
-        Path filePath = filePath(request.path());
-        ObjectMapper mapper = new ObjectMapper()
-                .setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
-
+        Path filePath = filePath(request.path(), properties.resourcesPath());
+        ObjectMapper mapper = new ObjectMapper().setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
         HttpResponse response;
 
         try {
             if (Files.exists(filePath)) {
-                response = new HttpResponse(OK, "", null);
+                String mimeType = FileUtil.guessMIMEType(filePath);
+                HttpContentType contentType = HttpContentType.statusOfMimeType(mimeType);
+                assert contentType != null;
+                String header = contentType.header();
+                response = new HttpResponse(OK, FileUtil.retrieveFile(filePath), Collections.singletonList(header));
             } else {
                 HttpModelError error = new HttpModelError()
                         .shortMessage("Resource not found")
                         .detailedError("Can not find the resource: ".concat(filePath.toString()))
                         .status(NOT_FOUND);
 
-                response = new HttpResponse(NOT_FOUND, mapper.writeValueAsString(error),
+                response = new HttpResponse(NOT_FOUND, mapper.writeValueAsString(error).getBytes(),
                         Collections.singletonList("Content-Type: application/json; charset=utf-8"));
             }
-        } catch (JsonProcessingException e) {
-            response = new HttpResponse(INTERNAL_SERVER_ERROR,
-                    "<h1>Internal server error</h1>",
-                    Collections.singletonList("Content-Type: text/html; charset=utf-8"));
-        }
-
-        sendResponse(response);
-    }
-
-    @Override
-    public void sendResponse(HttpResponse response) {
-        try {
-            OutputStream os = client.getOutputStream();
-            os.write(("HTTP/1.1 " + response.status().response()).getBytes());
-            os.write("\r\n".getBytes());
-            for (String header : response.headers()) {
-                os.write(header.concat("\r\n").getBytes());
-            }
-            os.write("\r\n".getBytes());
-            os.write(response.body().getBytes());
-            os.write("\r\n\r\n".getBytes());
-            os.flush();
-            client.close();
+            sendResponse(response, client);
         } catch (IOException e) {
-            throw new HttpServerException("An error occur trying to send a message");
+            send500Error(client);
         }
-    }
-
-    private Path filePath(String requestPath) {
-        requestPath = requestPath.equals("/")
-                ? "/index.html"
-                : requestPath;
-
-        return Paths.get(properties.resourcesPath(), requestPath);
     }
 }

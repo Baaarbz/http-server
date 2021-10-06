@@ -78,7 +78,7 @@ public class ConfigurationLoader {
         // Load custom banner for HTTP Server.
         try (InputStream inputStream = getClass().getClassLoader().getResourceAsStream("banner.txt")) {
             if (isNull(inputStream)) {
-                throw new FileNotFoundException("Custom banner not found in resources/");
+                throw new FileNotFoundException("Custom banner not found in 'resources/'");
             }
             // Print custom banner and configuration.
             System.out.printf(IOUtils.toString(inputStream, StandardCharsets.UTF_8),
