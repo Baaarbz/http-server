@@ -56,6 +56,8 @@ public interface HttpHandler {
     default Path filePath(String requestPath, String resourcesPath) {
         if (requestPath.startsWith("/webapp")) {
             resourcesPath = System.getProperty("user.dir");
+        } else if (requestPath.startsWith("/scripts") || requestPath.startsWith("/styles")) {
+            resourcesPath = System.getProperty("user.dir").concat("/webapp");
         } else {
             requestPath = requestPath.equals("/")
                     ? "/index.html"
