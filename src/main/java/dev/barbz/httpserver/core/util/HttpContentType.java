@@ -1,7 +1,8 @@
 package dev.barbz.httpserver.core.util;
 
 public enum HttpContentType {
-    CSS("text/css") {},
+    CSS("text/css"),
+    TEXT("text/plain"),
     HTML("text/html"),
     JAVASCRIPT("application/javascript"),
     JSON("application/json");
@@ -12,7 +13,7 @@ public enum HttpContentType {
                 .concat("; charset=utf-8");
     }
 
-    private String mimeType;
+    private final String mimeType;
 
     HttpContentType(String mimeType) {
         this.mimeType = mimeType;
@@ -31,6 +32,6 @@ public enum HttpContentType {
                 return httpContentType;
             }
         }
-        return null;
+        return TEXT;
     }
 }

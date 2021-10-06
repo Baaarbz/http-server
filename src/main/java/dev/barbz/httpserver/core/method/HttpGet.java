@@ -14,6 +14,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Collections;
 
+import static dev.barbz.httpserver.core.util.FileUtil.filePath;
 import static dev.barbz.httpserver.core.util.HttpStatus.NOT_FOUND;
 import static dev.barbz.httpserver.core.util.HttpStatus.OK;
 
@@ -30,9 +31,7 @@ public record HttpGet(HttpServerProperties properties,
             if (Files.exists(filePath)) {
                 String mimeType = FileUtil.guessMIMEType(filePath);
                 HttpContentType contentType = HttpContentType.statusOfMimeType(mimeType);
-                assert contentType != null;
-                String header = contentType.header();
-                response = new HttpResponse(OK, FileUtil.retrieveFile(filePath), Collections.singletonList(header));
+                response = new HttpResponse(OK, FileUtil.retrieveFile(filePath), Collections.singletonList(contentType.header()));
             } else {
                 HttpModelError error = new HttpModelError()
                         .shortMessage("Resource not found")
@@ -40,7 +39,7 @@ public record HttpGet(HttpServerProperties properties,
                         .status(NOT_FOUND);
 
                 response = new HttpResponse(NOT_FOUND, mapper.writeValueAsString(error).getBytes(),
-                        Collections.singletonList("Content-Type: application/json; charset=utf-8"));
+                        Collections.singletonList(HttpContentType.JSON.header()));
             }
             sendResponse(response, client);
         } catch (IOException e) {

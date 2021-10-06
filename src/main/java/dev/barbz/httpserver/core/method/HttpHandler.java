@@ -3,6 +3,7 @@ package dev.barbz.httpserver.core.method;
 import dev.barbz.httpserver.core.io.HttpRequest;
 import dev.barbz.httpserver.core.io.HttpResponse;
 import dev.barbz.httpserver.core.util.FileUtil;
+import dev.barbz.httpserver.core.util.HttpContentType;
 import dev.barbz.httpserver.core.util.HttpStatus;
 
 import java.io.IOException;
@@ -40,8 +41,11 @@ public interface HttpHandler {
     default void send500Error(Socket client) {
         try {
             byte[] file = FileUtil.retrieveFile(filePath("webapp/500-error.html"));
+            String mimeType = FileUtil.guessMIMEType(filePath("webapp/500-error.html"));
+            HttpContentType contentType = HttpContentType.statusOfMimeType(mimeType);
+
             HttpResponse response = new HttpResponse(HttpStatus.INTERNAL_SERVER_ERROR, file,
-                    Collections.singletonList("Content-Type: text/html; charset=utf-8"));
+                    Collections.singletonList(contentType.header()));
 
             sendResponse(response, client);
         } catch (IOException e) {

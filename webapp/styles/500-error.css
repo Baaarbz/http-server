@@ -197,7 +197,7 @@ html {
   }
 
   100% {
-    width: var(--linelength);
+    width: 100%;
   }
 }
 
@@ -207,7 +207,7 @@ html {
   }
 
   100% {
-    width: var(--linelength);
+    width: 100%;
   }
 }
 
