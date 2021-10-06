@@ -8,9 +8,9 @@ import dev.barbz.httpserver.core.util.HttpStatus;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.Socket;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Collections;
+
+import static dev.barbz.httpserver.core.util.FileUtil.filePath;
 
 public interface HttpHandler {
 
@@ -47,23 +47,5 @@ public interface HttpHandler {
         } catch (IOException e) {
             System.out.printf("Can not read 500-error.html:\n%s\n", e.getMessage());
         }
-    }
-
-    default Path filePath(String requestPath, String resourcesPath) {
-        if (requestPath.startsWith("/webapp")) {
-            resourcesPath = System.getProperty("user.dir");
-        } else if (requestPath.startsWith("/scripts") || requestPath.startsWith("/styles")) {
-            resourcesPath = System.getProperty("user.dir").concat("/webapp");
-        } else {
-            requestPath = requestPath.equals("/")
-                    ? "/index.html"
-                    : requestPath;
-        }
-
-        return Paths.get(resourcesPath, requestPath);
-    }
-
-    default Path filePath(String filename) {
-        return Paths.get(System.getProperty("user.dir").concat("/").concat(filename));
     }
 }
