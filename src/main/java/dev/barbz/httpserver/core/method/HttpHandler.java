@@ -39,8 +39,8 @@ public interface HttpHandler {
 
     default void send500Error(Socket client) {
         try {
-            byte[] file = FileUtil.retrieveFile(filePath("webapp/500-error.html"));
-            HttpContentType contentType = FileUtil.retrieveContentType(filePath("webapp/500-error.html"));
+            byte[] file = FileUtil.retrieveFile(filePath("webapp/error/500-error.html"));
+            HttpContentType contentType = FileUtil.retrieveContentType(filePath("webapp/error/500-error.html"));
 
             HttpResponse response = new HttpResponse(HttpStatus.INTERNAL_SERVER_ERROR, file, contentType.header());
 

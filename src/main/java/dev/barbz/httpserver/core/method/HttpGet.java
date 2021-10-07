@@ -1,5 +1,7 @@
 package dev.barbz.httpserver.core.method;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.barbz.httpserver.configuration.HttpServerProperties;
 import dev.barbz.httpserver.core.io.HttpModelError;
@@ -23,7 +25,7 @@ public record HttpGet(HttpServerProperties properties,
     @Override
     public void handle(HttpRequest request) {
         Path filePath = filePath(request.path(), properties.resourcesPath());
-        ObjectMapper mapper = new ObjectMapper();
+        ObjectMapper mapper = new ObjectMapper().setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
         HttpResponse response;
 
         try {
