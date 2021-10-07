@@ -1,5 +1,7 @@
 package dev.barbz.httpserver.core.util;
 
+import org.apache.commons.io.FilenameUtils;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -11,8 +13,9 @@ public class FileUtil {
         return Files.readAllBytes(filePath);
     }
 
-    public static String guessMIMEType(Path filePath) throws IOException {
-        return Files.probeContentType(filePath);
+    public static HttpContentType retrieveContentType(Path filePath) throws IOException {
+        String extension = FilenameUtils.getExtension(filePath.toString());
+        return HttpContentType.contentTypeOfExtension(extension);
     }
 
     public static Path filePath(String requestPath, String resourcesPath) {

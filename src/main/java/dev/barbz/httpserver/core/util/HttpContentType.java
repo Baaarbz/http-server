@@ -1,11 +1,11 @@
 package dev.barbz.httpserver.core.util;
 
 public enum HttpContentType {
-    CSS("text/css"),
-    TEXT("text/plain"),
-    HTML("text/html"),
-    JAVASCRIPT("application/javascript"),
-    JSON("application/json");
+    CSS("text/css", "css"),
+    TEXT("text/plain", "txt"),
+    HTML("text/html", "html"),
+    JAVASCRIPT("application/javascript", "js"),
+    JSON("application/json", "json");
 
     public String header() {
         return "Content-Type: "
@@ -15,8 +15,11 @@ public enum HttpContentType {
 
     private final String mimeType;
 
-    HttpContentType(String mimeType) {
+    private final String extension;
+
+    HttpContentType(String mimeType, String extension) {
         this.mimeType = mimeType;
+        this.extension = extension;
     }
 
     /**
@@ -26,9 +29,25 @@ public enum HttpContentType {
      * @param mimeType status value (text/html)
      * @return HTTP Content Type header
      */
-    public static HttpContentType statusOfMimeType(String mimeType) {
+    public static HttpContentType contentTypeOfMimeType(String mimeType) {
         for (HttpContentType httpContentType : values()) {
             if (httpContentType.mimeType.equals(mimeType)) {
+                return httpContentType;
+            }
+        }
+        return TEXT;
+    }
+
+    /**
+     * Retrieve the HTTP Content Type enum
+     * from the file extension
+     *
+     * @param extension file extension (js)
+     * @return HTTP Content Type header
+     */
+    public static HttpContentType contentTypeOfExtension(String extension) {
+        for (HttpContentType httpContentType : values()) {
+            if (httpContentType.extension.equals(extension)) {
                 return httpContentType;
             }
         }

@@ -81,7 +81,7 @@ public class ConfigurationLoader {
                 throw new FileNotFoundException("Custom banner not found in 'resources/'");
             }
             // Print custom banner and configuration.
-            System.out.printf(IOUtils.toString(inputStream, StandardCharsets.UTF_8),
+            System.out.printf(IOUtils.toString(inputStream, StandardCharsets.UTF_8).concat("\n"),
                     properties.port(),
                     properties.threads(),
                     properties.resourcesPath(),

@@ -12,7 +12,6 @@ import java.io.IOException;
 import java.net.Socket;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Collections;
 
 import static dev.barbz.httpserver.core.util.FileUtil.filePath;
 import static dev.barbz.httpserver.core.util.HttpStatus.NOT_FOUND;
@@ -29,17 +28,15 @@ public record HttpGet(HttpServerProperties properties,
 
         try {
             if (Files.exists(filePath)) {
-                String mimeType = FileUtil.guessMIMEType(filePath);
-                HttpContentType contentType = HttpContentType.statusOfMimeType(mimeType);
-                response = new HttpResponse(OK, FileUtil.retrieveFile(filePath), Collections.singletonList(contentType.header()));
+                HttpContentType contentType = FileUtil.retrieveContentType(filePath);
+                response = new HttpResponse(OK, FileUtil.retrieveFile(filePath), contentType.header());
             } else {
                 HttpModelError error = new HttpModelError()
                         .shortMessage("Resource not found")
                         .detailedError("Can not find the resource: ".concat(filePath.toString()))
                         .status(NOT_FOUND);
 
-                response = new HttpResponse(NOT_FOUND, mapper.writeValueAsString(error).getBytes(),
-                        Collections.singletonList(HttpContentType.JSON.header()));
+                response = new HttpResponse(NOT_FOUND, mapper.writeValueAsString(error).getBytes(),HttpContentType.JSON.header());
             }
             sendResponse(response, client);
         } catch (IOException e) {
