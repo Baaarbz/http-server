@@ -25,7 +25,7 @@ public record HttpGet(HttpServerProperties properties,
     @Override
     public void handle(HttpRequest request) {
         Path filePath = filePath(request.path(), properties.resourcesPath());
-        ObjectMapper mapper = new ObjectMapper().setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
+        ObjectMapper mapper = new ObjectMapper();
         HttpResponse response;
 
         try {
