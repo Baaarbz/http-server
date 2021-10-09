@@ -14,8 +14,7 @@ import java.nio.file.Path;
 import static dev.barbz.httpserver.core.util.FileUtil.filePath;
 import static dev.barbz.httpserver.core.util.HttpStatus.OK;
 
-public record HttpGet(HttpServerProperties properties,
-                      Socket client) implements HttpHandler {
+public record HttpGet(HttpServerProperties properties, Socket client) implements HttpHandler {
 
     @Override
     public void handle(HttpRequest request) {
