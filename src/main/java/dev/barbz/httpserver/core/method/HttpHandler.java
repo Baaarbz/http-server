@@ -1,5 +1,8 @@
 package dev.barbz.httpserver.core.method;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.PropertyAccessor;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.barbz.httpserver.core.io.HttpRequest;
 import dev.barbz.httpserver.core.io.HttpResponse;
 import dev.barbz.httpserver.core.util.FileUtil;
@@ -13,6 +16,8 @@ import java.net.Socket;
 import static dev.barbz.httpserver.core.util.FileUtil.filePath;
 
 public interface HttpHandler {
+
+    ObjectMapper mapper = new ObjectMapper().setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
 
     void handle(HttpRequest request);
 
@@ -43,6 +48,19 @@ public interface HttpHandler {
             HttpContentType contentType = FileUtil.retrieveContentType(filePath("webapp/error/500-error.html"));
 
             HttpResponse response = new HttpResponse(HttpStatus.INTERNAL_SERVER_ERROR, file, contentType.header());
+
+            sendResponse(response, client);
+        } catch (IOException e) {
+            System.out.printf("Can not read 500-error.html:\n%s\n", e.getMessage());
+        }
+    }
+
+    default void send404Error(Socket client) {
+        try {
+            byte[] file = FileUtil.retrieveFile(filePath("webapp/error/404-error.html"));
+            HttpContentType contentType = FileUtil.retrieveContentType(filePath("webapp/error/404-error.html"));
+
+            HttpResponse response = new HttpResponse(HttpStatus.NOT_FOUND, file, contentType.header());
 
             sendResponse(response, client);
         } catch (IOException e) {
