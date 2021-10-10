@@ -20,7 +20,8 @@ public class HttpServer {
     public static void main(String[] args) {
         ConfigurationLoader configurationLoader = new ConfigurationLoader();
 
-        ThreadPoolExecutor executor = (ThreadPoolExecutor) Executors.newFixedThreadPool(configurationLoader.properties().threads());
+        ThreadPoolExecutor executor =
+                (ThreadPoolExecutor) Executors.newFixedThreadPool(configurationLoader.properties().server().threads());
         executor.submit(() -> new ListenerThread(configurationLoader.properties()).start());
     }
 }

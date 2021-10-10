@@ -18,7 +18,7 @@ public record HttpGet(HttpServerProperties properties, Socket client) implements
 
     @Override
     public void handle(HttpRequest request) {
-        Path filePath = filePath(request.path(), properties.resourcesPath());
+        Path filePath = filePath(request.path(), properties.server().resourcesPath());
         HttpResponse response;
 
         try {

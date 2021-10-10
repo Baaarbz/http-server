@@ -1,5 +1,6 @@
 package dev.barbz.httpserver.configuration;
 
+import dev.barbz.httpserver.datasource.DatasourceUtil;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
@@ -46,7 +47,7 @@ public class ConfigurationLoader {
             Properties properties = new Properties();
             properties.load(inputStream);
             // Instantiates HTTP Server properties
-            instantiatesHttpServerProperties(properties);
+            loadProperties(properties);
             // Log configuration and banner
             logConfiguration();
         } catch (IOException e) {
@@ -62,13 +63,12 @@ public class ConfigurationLoader {
      *
      * @param properties properties of "resources/config.properties"
      */
-    private void instantiatesHttpServerProperties(Properties properties) {
-        int port = Integer.parseInt(properties.getProperty("server.port", "8080"));
-        int threads = Integer.parseInt(properties.getProperty("server.threads", "4"));
-        String resourcesPath = properties.getProperty("server.resources.path", "/");
-        boolean securityEnabled = Boolean.parseBoolean(properties.getProperty("security.enabled", "false"));
+    private void loadProperties(Properties properties) {
+        HttpServerProperties.Server server = loadServerProperties(properties);
+        HttpServerProperties.Security security = loadSecurityProperties(properties);
+        HttpServerProperties.Datasource datasource = loadDatasourceProperties(properties);
 
-        this.properties = new HttpServerProperties(port, threads, resourcesPath, securityEnabled);
+        this.properties = new HttpServerProperties(server, security, datasource);
     }
 
     /**
@@ -82,12 +82,45 @@ public class ConfigurationLoader {
             }
             // Print custom banner and configuration.
             System.out.printf(IOUtils.toString(inputStream, StandardCharsets.UTF_8).concat("\n"),
-                    properties.port(),
-                    properties.threads(),
-                    properties.resourcesPath(),
-                    properties.securityEnabled() ? "Yes" : "No");
+                    properties.server().port(),
+                    properties.server().threads(),
+                    properties.server().resourcesPath(),
+                    properties.security().enabled() ? "Yes" : "No",
+                    DatasourceUtil.generateConnectionUrl(properties.datasource()),
+                    properties.datasource().user(),
+                    properties.datasource().password());
         } catch (IOException e) {
             log.error("Can not read banner. {}", e.getMessage());
         }
+    }
+
+    private HttpServerProperties.Server loadServerProperties(Properties properties) {
+        // Server properties
+        int port = Integer.parseInt(properties.getProperty("server.port", "8080"));
+        int threads = Integer.parseInt(properties.getProperty("server.threads", "4"));
+        String resourcesPath = properties.getProperty("server.resources.path", "/");
+
+        return new HttpServerProperties.Server(port, threads, resourcesPath);
+    }
+
+    private HttpServerProperties.Security loadSecurityProperties(Properties properties) {
+        // Security properties
+        boolean enabled = Boolean.parseBoolean(properties.getProperty("security.enabled", "false"));
+        String defaultUser = properties.getProperty("security.user", null);
+        String defaultPwd = properties.getProperty("security.password", null);
+
+        return new HttpServerProperties.Security(enabled, defaultUser, defaultPwd);
+    }
+
+    private HttpServerProperties.Datasource loadDatasourceProperties(Properties properties) {
+        // Datasource properties
+        String user = properties.getProperty("datasource.user", null);
+        String pwd = properties.getProperty("datasource.password", null);
+        String host = properties.getProperty("datasource.host", null);
+        String port = properties.getProperty("datasource.port", "");
+        String database = properties.getProperty("datasource.database", null);
+        String type = properties.getProperty("datasource.type", null);
+
+        return new HttpServerProperties.Datasource(user, pwd, host, port, type, database);
     }
 }

@@ -24,7 +24,7 @@ public class ListenerThread extends Thread {
 
     @Override
     public void run() {
-        try (ServerSocket serverSocket = new ServerSocket(serverProperties.port())) {
+        try (ServerSocket serverSocket = new ServerSocket(serverProperties.server().port())) {
             while (serverSocket.isBound() && !serverSocket.isClosed()) {
                 Socket client = serverSocket.accept();
                 handleRequest(client);
