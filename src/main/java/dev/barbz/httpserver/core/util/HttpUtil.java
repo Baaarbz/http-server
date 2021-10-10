@@ -1,6 +1,7 @@
 package dev.barbz.httpserver.core.util;
 
 import dev.barbz.httpserver.configuration.HttpServerProperties;
+import dev.barbz.httpserver.core.common.HttpMethod;
 import dev.barbz.httpserver.exception.HttpServerException;
 import dev.barbz.httpserver.core.io.HttpRequest;
 import dev.barbz.httpserver.core.method.HttpGet;

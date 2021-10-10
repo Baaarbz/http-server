@@ -1,5 +1,6 @@
 package dev.barbz.httpserver.core.util;
 
+import dev.barbz.httpserver.core.common.HttpContentType;
 import org.apache.commons.io.FilenameUtils;
 
 import java.io.IOException;

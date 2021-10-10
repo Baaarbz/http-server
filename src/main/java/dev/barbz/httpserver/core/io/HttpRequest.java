@@ -1,6 +1,6 @@
 package dev.barbz.httpserver.core.io;
 
-import dev.barbz.httpserver.core.util.HttpMethod;
+import dev.barbz.httpserver.core.common.HttpMethod;
 
 import java.util.List;
 

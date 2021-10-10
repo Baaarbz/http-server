@@ -1,4 +1,4 @@
-package dev.barbz.httpserver.core.util;
+package dev.barbz.httpserver.core.common;
 
 public enum HttpContentType {
     CSS("text/css", "css"),

@@ -1,6 +1,5 @@
 package dev.barbz.httpserver.configuration;
 
-import dev.barbz.httpserver.datasource.DatasourceUtil;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
@@ -86,7 +85,7 @@ public class ConfigurationLoader {
                     properties.server().threads(),
                     properties.server().resourcesPath(),
                     properties.security().enabled() ? "Yes" : "No",
-                    DatasourceUtil.generateConnectionUrl(properties.datasource()),
+                    properties.datasource().url(),
                     properties.datasource().user(),
                     properties.datasource().password());
         } catch (IOException e) {
@@ -116,11 +115,9 @@ public class ConfigurationLoader {
         // Datasource properties
         String user = properties.getProperty("datasource.user", null);
         String pwd = properties.getProperty("datasource.password", null);
-        String host = properties.getProperty("datasource.host", null);
-        String port = properties.getProperty("datasource.port", "");
-        String database = properties.getProperty("datasource.database", null);
-        String type = properties.getProperty("datasource.type", null);
+        String url = properties.getProperty("datasource.url", null);
+        String driver = properties.getProperty("datasource.driver", null);
 
-        return new HttpServerProperties.Datasource(user, pwd, host, port, type, database);
+        return new HttpServerProperties.Datasource(user, pwd, url, driver);
     }
 }

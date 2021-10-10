@@ -4,7 +4,7 @@ import dev.barbz.httpserver.configuration.HttpServerProperties;
 import dev.barbz.httpserver.core.io.HttpRequest;
 import dev.barbz.httpserver.core.io.HttpResponse;
 import dev.barbz.httpserver.core.util.FileUtil;
-import dev.barbz.httpserver.core.util.HttpContentType;
+import dev.barbz.httpserver.core.common.HttpContentType;
 
 import java.io.IOException;
 import java.net.Socket;
@@ -12,7 +12,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 import static dev.barbz.httpserver.core.util.FileUtil.filePath;
-import static dev.barbz.httpserver.core.util.HttpStatus.OK;
+import static dev.barbz.httpserver.core.common.HttpStatus.OK;
 
 public record HttpGet(HttpServerProperties properties, Socket client) implements HttpHandler {
 

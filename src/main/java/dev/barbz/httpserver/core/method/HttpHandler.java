@@ -6,8 +6,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.barbz.httpserver.core.io.HttpRequest;
 import dev.barbz.httpserver.core.io.HttpResponse;
 import dev.barbz.httpserver.core.util.FileUtil;
-import dev.barbz.httpserver.core.util.HttpContentType;
-import dev.barbz.httpserver.core.util.HttpStatus;
+import dev.barbz.httpserver.core.common.HttpContentType;
+import dev.barbz.httpserver.core.common.HttpStatus;
 
 import java.io.IOException;
 import java.io.OutputStream;

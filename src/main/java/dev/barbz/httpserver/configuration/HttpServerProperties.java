@@ -8,7 +8,6 @@ public record HttpServerProperties(Server server, Security security, Datasource 
     public static record Security(Boolean enabled, String defaultUser, String defaultPassword) {
     }
 
-    public static record Datasource(String user, String password, String host, String port, String type,
-                                    String database) {
+    public static record Datasource(String user, String password, String url, String driver) {
     }
 }
