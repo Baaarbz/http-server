@@ -65,7 +65,7 @@ public class ConfigurationLoader {
     private void instantiatesHttpServerProperties(Properties properties) {
         int port = Integer.parseInt(properties.getProperty("server.port", "8080"));
         int threads = Integer.parseInt(properties.getProperty("server.threads", "4"));
-        String resourcesPath = properties.getProperty("resources.path", "/");
+        String resourcesPath = properties.getProperty("server.resources.path", "/");
         boolean securityEnabled = Boolean.parseBoolean(properties.getProperty("security.enabled", "false"));
 
         this.properties = new HttpServerProperties(port, threads, resourcesPath, securityEnabled);

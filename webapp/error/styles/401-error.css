@@ -1,0 +1,25 @@
+@font-face {
+    font-family: Arvo;
+    src: url("../../../webapp/assets/fonts/arvo/Arvo-Regular.ttf");
+}
+
+img {
+    width: 100%;
+}
+
+.four_zero_four_bg {
+    font-family: Arvo, serif;
+    background-image: url("../../../webapp/assets/gifs/401-error.gif");
+    height: 400px;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+
+.four_zero_four_bg h1 {
+    font-size: 80px;
+}
+
+.error-text {
+    font-family: Arvo, serif;
+}

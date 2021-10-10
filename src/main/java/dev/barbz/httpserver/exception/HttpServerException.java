@@ -1,4 +1,4 @@
-package dev.barbz.httpserver.core.exception;
+package dev.barbz.httpserver.exception;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

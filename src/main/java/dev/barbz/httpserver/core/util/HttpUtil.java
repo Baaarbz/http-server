@@ -1,7 +1,7 @@
 package dev.barbz.httpserver.core.util;
 
 import dev.barbz.httpserver.configuration.HttpServerProperties;
-import dev.barbz.httpserver.core.exception.HttpServerException;
+import dev.barbz.httpserver.exception.HttpServerException;
 import dev.barbz.httpserver.core.io.HttpRequest;
 import dev.barbz.httpserver.core.method.HttpGet;
 import dev.barbz.httpserver.core.method.HttpHandler;
@@ -31,7 +31,7 @@ public class HttpUtil {
      *
      * @param request request as string
      */
-    public synchronized static HttpRequest parseRequest(String request) {
+    public static HttpRequest parseRequest(String request) {
         String[] requestLines = request.split("\r\n");
         // The request type (method, path and version) is contained in the first
         // line of the request.
