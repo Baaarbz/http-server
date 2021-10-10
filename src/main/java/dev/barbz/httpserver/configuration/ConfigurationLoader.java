@@ -117,7 +117,8 @@ public class ConfigurationLoader {
         String pwd = properties.getProperty("datasource.password", null);
         String url = properties.getProperty("datasource.url", null);
         String driver = properties.getProperty("datasource.driver", null);
+        boolean showSql = Boolean.parseBoolean(properties.getProperty("datasource.show-sql", "false"));
 
-        return new HttpServerProperties.Datasource(user, pwd, url, driver);
+        return new HttpServerProperties.Datasource(user, pwd, url, driver, showSql);
     }
 }

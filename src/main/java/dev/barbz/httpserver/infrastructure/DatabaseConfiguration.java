@@ -1,4 +1,10 @@
 package dev.barbz.httpserver.infrastructure;
 
-public class DatabaseConfiguration {
+import dev.barbz.httpserver.configuration.HttpServerProperties;
+
+public record DatabaseConfiguration(HttpServerProperties.Datasource datasource) {
+
+    public void initConnection() {
+
+    }
 }
