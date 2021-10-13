@@ -11,7 +11,3 @@
         |   Port:               %s
         |   Thread pool size:   %s
         |   Resources path:     %s
-        |   Security enabled:   %s
-        |   Datasource:         %s
-        |       - User:         %s
-        |       - Password:     %s

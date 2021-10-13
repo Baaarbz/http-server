@@ -2,10 +2,12 @@ package dev.barbz.httpserver.core.util;
 
 import dev.barbz.httpserver.configuration.HttpServerProperties;
 import dev.barbz.httpserver.core.common.HttpMethod;
-import dev.barbz.httpserver.exception.HttpServerException;
 import dev.barbz.httpserver.core.io.HttpRequest;
+import dev.barbz.httpserver.core.method.HttpDelete;
 import dev.barbz.httpserver.core.method.HttpGet;
 import dev.barbz.httpserver.core.method.HttpHandler;
+import dev.barbz.httpserver.core.method.HttpPost;
+import dev.barbz.httpserver.core.method.HttpPut;
 import lombok.extern.slf4j.Slf4j;
 
 import java.net.Socket;
@@ -19,9 +21,9 @@ public class HttpUtil {
     public static void processRequest(HttpRequest request, HttpServerProperties properties, Socket client) {
         HttpHandler handler = switch (request.method()) {
             case GET -> new HttpGet(properties, client);
-            default -> throw new HttpServerException("This HTTP Serve do not handle your "
-                    .concat(request.method().name())
-                    .concat(" request.\nAllowed request: GET, POST, PUT, DELETE"));
+            case POST -> new HttpPost(properties, client);
+            case PUT -> new HttpPut(properties, client);
+            case DELETE -> new HttpDelete(properties, client);
         };
 
         handler.handle(request);
@@ -42,7 +44,7 @@ public class HttpUtil {
 
         // The header comes in the request after the 2 line, then we can read the headers
         // Now we only want to read the 'Accept' 'Content' or  'Authorization' header
-        List<String> headers = Arrays.asList(requestLines).subList(2, requestLines.length).stream()
+        List<String> headers = Arrays.asList(requestLines).subList(1, requestLines.length).stream()
                 .filter((String h) ->
                         (h.startsWith("Accept") || h.startsWith("Content") || h.startsWith("Authorization")))
                 .collect(Collectors.toList());

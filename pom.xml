@@ -45,17 +45,5 @@
             <artifactId>jackson-databind</artifactId>
             <version>2.13.0</version>
         </dependency>
-        <!-- Hibernate -->
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-core</artifactId>
-            <version>5.5.7.Final</version>
-        </dependency>
-        <!-- PostgreSQL -->
-        <dependency>
-            <groupId>org.postgresql</groupId>
-            <artifactId>postgresql</artifactId>
-            <version>42.2.24</version>
-        </dependency>
     </dependencies>
 </project>

@@ -65,9 +65,8 @@ public class ConfigurationLoader {
     private void loadProperties(Properties properties) {
         HttpServerProperties.Server server = loadServerProperties(properties);
         HttpServerProperties.Security security = loadSecurityProperties(properties);
-        HttpServerProperties.Datasource datasource = loadDatasourceProperties(properties);
 
-        this.properties = new HttpServerProperties(server, security, datasource);
+        this.properties = new HttpServerProperties(server, security);
     }
 
     /**
@@ -84,10 +83,7 @@ public class ConfigurationLoader {
                     properties.server().port(),
                     properties.server().threads(),
                     properties.server().resourcesPath(),
-                    properties.security().enabled() ? "Yes" : "No",
-                    properties.datasource().url(),
-                    properties.datasource().user(),
-                    properties.datasource().password());
+                    properties.security().enabled() ? "Yes" : "No");
         } catch (IOException e) {
             log.error("Can not read banner. {}", e.getMessage());
         }
@@ -109,16 +105,5 @@ public class ConfigurationLoader {
         String defaultPwd = properties.getProperty("security.password", null);
 
         return new HttpServerProperties.Security(enabled, defaultUser, defaultPwd);
-    }
-
-    private HttpServerProperties.Datasource loadDatasourceProperties(Properties properties) {
-        // Datasource properties
-        String user = properties.getProperty("datasource.user", null);
-        String pwd = properties.getProperty("datasource.password", null);
-        String url = properties.getProperty("datasource.url", null);
-        String driver = properties.getProperty("datasource.driver", null);
-        boolean showSql = Boolean.parseBoolean(properties.getProperty("datasource.show-sql", "false"));
-
-        return new HttpServerProperties.Datasource(user, pwd, url, driver, showSql);
     }
 }
